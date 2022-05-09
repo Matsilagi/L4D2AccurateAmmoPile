@@ -6,4 +6,3 @@ Something i made while bored last night, works just like the L4D ones work, just
 TODO:
 
 - Make the weapon_ammo_spawn entity actually take the map keyvalues / models / usecount into consideration
-- Make it so the entity properties like the Use count is editable.
