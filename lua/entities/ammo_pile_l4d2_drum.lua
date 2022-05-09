@@ -4,18 +4,32 @@ ENT.Base = "base_anim"
 ENT.PrintName = "Ammunition Pile (Coffee Drum)"
 ENT.Category = "Left 4 Dead 2"
 ENT.Author = "Matsilagi"
-ENT.Editable = false
+ENT.Editable = true
 ENT.Spawnable = true
 ENT.AdminOnly = false
 ENT.UseTimer = CurTime()
-ENT.UseCount = -1
-ENT.UsedCount = 0
 
 function ENT:Draw()
 	self:DrawModel()
 end
 
+function ENT:SetupDataTables()
+	self:NetworkVar( "Int", 0, "UseCount", { KeyName = "Use Count",	Edit = { type = "Int",	order = 1, min = -1, max = 9999 } } )
+	self:SetNWInt("UsedCount",0)
+	
+	if SERVER then
+		self:SetUseCount( -1 )
+	end
+	
+end
+
 if SERVER then
+
+	function ENT:Think()
+		local UseCounter = self:GetNWInt("UsedCount",0)
+		if UseCounter >= self:GetUseCount() and self:GetUseCount() != 0 and self:GetUseCount() != -1 then self:Remove() end
+	end
+
 	function ENT:Initialize()
 		if SERVER then
 			self:SetModel( "models/props/arccw_uc/coffeeammo.mdl" )
@@ -31,6 +45,7 @@ if SERVER then
 		local curweap = activator:GetActiveWeapon()
 		local wepammo = curweap:GetPrimaryAmmoType() or nil
 		local wepammo2 = curweap:GetSecondaryAmmoType() or nil
+		local usecounter = self:GetNWInt("UsedCount")
 		
 		if wepammo == nil or wepammo < 0 then self.UseTimer = CurTime() + 1 return end
 		
@@ -76,7 +91,8 @@ if SERVER then
 			
 			self:EmitSound( "BaseCombatCharacter.AmmoPilePickupDrum" )
 			self.UseTimer = CurTime() + 1
-			self.UsedCount = self.UsedCount + 1
+			usecounter = usecounter + 1
+			self:SetNWInt("UsedCount", usecounter)
 		end
 	end
 
@@ -99,7 +115,6 @@ else
 	end
 
 	function ENT:Think()
-		if self.UsedCount >= self.UseCount and self.UseCount != -1 then self:Remove() end
 		local ply = LocalPlayer()
 		if !IsValid(ply) then return false end
 		local closedist = 5000
