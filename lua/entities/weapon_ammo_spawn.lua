@@ -1,23 +1,59 @@
 AddCSLuaFile()
 ENT.Type = "anim"
-ENT.Base = "base_anim"
+ENT.Base = "base_lambda_entity" --I borrowed this from Lambda, no way im spending hours trying to get KeyValues to work.
 ENT.PrintName = "Ammunition Pile"
-ENT.Author = "Matsilagi"
 ENT.Category = "Left 4 Dead 2"
-ENT.Editable = true
-ENT.Spawnable = true
+ENT.Author = "Matsilagi"
+ENT.Editable = false
+ENT.Spawnable = false
 ENT.AdminOnly = false
 ENT.UseTimer = CurTime()
+ENT.Count = -1
+
+DEFINE_BASECLASS("base_lambda_entity")
 
 function ENT:Draw()
 	self:DrawModel()
 end
 
+function ENT:SetupDataTables()
+	self:NetworkVar( "Int", 0, "UseCount", { KeyName = "Use Count",	Edit = { type = "Int",	order = 1, min = -1, max = 9999 } } )
+	self:SetNWInt("UsedCount",0)
+	
+	if SERVER then
+		self:SetUseCount( -1 )
+	end
+	
+end
+
+function ENT:KeyValue( key, val )
+
+    BaseClass.KeyValue(self, key, val)
+
+    if key:iequals("model") then
+        self.Model = tostring(val)
+    elseif key:iequals("count") then
+		self.Count = val
+		self:SetUseCount(val)
+    elseif key:iequals("skin") then
+        self.Skin = tonumber(val)
+    end
+
+end
+
 if SERVER then
+
+	function ENT:Think()
+		local UseCounter = self:GetNWInt("UsedCount",0)
+		if UseCounter >= self:GetUseCount() and self:GetUseCount() != 0 and self:GetUseCount() != -1 then self:Remove() end
+	end
+
 	function ENT:Initialize()
 		if SERVER then
-			self:SetModel( "models/props/arccw_uc/coffeeammo.mdl" )
-			self:SetMoveType( MOVETYPE_VPHYSICS )
+			self:SetModel( self.Model or "models/props/arccw_uc/coffeeammo.mdl" )
+			self:SetSkin (self.Skin or 0)
+			self:SetUseCount(self.Count or 0)
+			self:SetMoveType( MOVETYPE_NONE )
 			self:SetSolid( SOLID_VPHYSICS )
 			self:PhysicsInit( SOLID_VPHYSICS )
 			self:SetCollisionGroup( COLLISION_GROUP_INTERACTIVE )
@@ -28,7 +64,8 @@ if SERVER then
 	function ENT:Use( activator, caller )
 		local curweap = activator:GetActiveWeapon()
 		local wepammo = curweap:GetPrimaryAmmoType() or nil
-		local wepammo2 = curweap:GetSecondaryAmmoType() or false
+		local wepammo2 = curweap:GetSecondaryAmmoType() or nil
+		local usecounter = self:GetNWInt("UsedCount")
 		
 		if wepammo == nil or wepammo < 0 then self.UseTimer = CurTime() + 1 return end
 		
@@ -72,8 +109,10 @@ if SERVER then
 				activator:SetAmmo(ammotogive2, wepammo2)
 			end
 			
-			self:EmitSound( "BaseCombatCharacter.AmmoPilePickup" )
+			self:EmitSound( "BaseCombatCharacter.AmmoPilePickupDrum" )
 			self.UseTimer = CurTime() + 1
+			usecounter = usecounter + 1
+			self:SetNWInt("UsedCount", usecounter)
 		end
 	end
 
