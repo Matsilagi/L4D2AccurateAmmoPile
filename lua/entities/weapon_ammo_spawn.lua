@@ -109,7 +109,7 @@ if SERVER then
 				activator:SetAmmo(ammotogive2, wepammo2)
 			end
 			
-			self:EmitSound( "BaseCombatCharacter.AmmoPilePickupDrum" )
+			self:EmitSound( "BaseCombatCharacter.AmmoPilePickup" )
 			self.UseTimer = CurTime() + 1
 			usecounter = usecounter + 1
 			self:SetNWInt("UsedCount", usecounter)
