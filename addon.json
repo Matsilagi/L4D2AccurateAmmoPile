@@ -1,0 +1,11 @@
+{
+	"title"		:	"L4D2 Ammopiles Accurate",
+	"type"		:	"Tool",
+	"tags"		:	[ "Fun", "Realism" ],
+	"ignore"	:
+	[
+		"*.psd",
+		"*.vcproj",
+		"*.svn*"
+	]
+}

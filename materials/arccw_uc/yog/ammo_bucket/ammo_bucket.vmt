@@ -1,0 +1,28 @@
+// Valve Material Setup 2014. Brought you by Studio Apocalyptic.
+// Written by Yogensia and Rafael De Jongh
+// More information: http://source.gamebanana.com/tuts/11498
+// Parameter Cheat Sheet: http://bit.ly/1ibGMCe (Google Drive Spreadsheet)
+
+Vertexlitgeneric
+{
+
+	// MAIN SETTINGS
+	$basetexture                "arccw_uc/yog/ammo_bucket/ammo_bucket_d"
+	$bumpmap                    "arccw_uc/yog/ammo_bucket/ammo_bucket_n"
+
+	// PHONG SHADING
+	$phong                      1
+	$phongboost                 1.5
+	$phongfresnelranges         "[1 2.5 0.5]"
+	$phongtint                  "[1 1 .8]"
+	$phongexponenttexture       "arccw_uc/yog/ammo_bucket/ammo_bucket_g"
+	$normalmapalphaphongmask    1
+
+	// ENVIRONMENT REFLECTION
+	$envmap                     env_cubemap
+	$envmaptint                 "[.006 .006 .006]"
+	$envmapfresnel              1
+	$envmapFresnelMinMaxExp     "[0 0 .5]"
+	$normalmapalphaenvmapmask   1
+
+}
