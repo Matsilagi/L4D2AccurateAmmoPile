@@ -56,7 +56,7 @@ if SERVER then
 			self:SetMoveType( MOVETYPE_NONE )
 			self:SetSolid( SOLID_VPHYSICS )
 			self:PhysicsInit( SOLID_VPHYSICS )
-			self:SetCollisionGroup( COLLISION_GROUP_INTERACTIVE )
+			self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
 			self:DrawShadow( true )
 		end
 	end
