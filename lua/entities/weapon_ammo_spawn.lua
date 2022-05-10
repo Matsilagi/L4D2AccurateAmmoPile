@@ -136,6 +136,7 @@ else
 
 	function ENT:Think()
 		local ply = LocalPlayer()
+		local halo_cvar = GetConVar("cl_ammopile_halo") or CreateClientConVar("cl_ammopile_halo", 1, true, false)
 		if !IsValid(ply) then return false end
 		local closedist = 5000
 		local pos = ply:GetPos()
@@ -146,7 +147,7 @@ else
 			halocolor = Color(0.3*255, 0.4*255, 1.0*255)
 		end
 		
-		if self:BeingLookedAtByLocalPlayer() then
+		if self:BeingLookedAtByLocalPlayer() and halo_cvar:GetBool() then
 			halo.Add({self}, halocolor, 2, 2, 6, true, true)
 		end
 	end
