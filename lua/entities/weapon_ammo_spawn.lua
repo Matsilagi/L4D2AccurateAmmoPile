@@ -77,7 +77,7 @@ if SERVER then
 			local ammotogive = 0
 			local ammotogive2 = 0
 			
-			if wepammo1 != false or wepammo1 != nil then
+			if wepammo != false or wepammo != nil then
 				if mag1 >= 0 and maxclip != nil then
 					ammotogive = (maxclip*10) - mag1
 				elseif mag1 < 0 and wepammo >= 0 and activator:GetAmmoCount(wepammo) >= 0 then

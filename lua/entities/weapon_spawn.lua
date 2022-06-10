@@ -309,30 +309,37 @@ if SERVER then
 		local wepammo2 = weaponclass.Secondary.Ammo or 0
 		local usecounter = self:GetNWInt("UsedCount")
 		
-		if curweap == weaponclass then self.UseTimer = CurTime() + 1 return end
-		
-		if self.UseTimer <= CurTime() and activator:IsPlayer() then
+		if self.UseTimer <= CurTime() and activator:IsPlayer() and curweap != tostring(self.ChosenWeapon) then
 			local maxclip = weaponclass.Primary.ClipSize
 			local maxclip2 = weaponclass.Secondary.ClipSize
 			local ammotogive = 0
 			local ammotogive2 = 0
+			local mag1 = 0
 			
-			if wepammo1 != false or wepammo1 != nil then
+			if wepammo != false or wepammo != nil then
+			
+				if curweap:Clip1() > 0 then
+					mag1 = curweap:Clip1()
+				end
+				
 				if maxclip != nil then 
-					ammotogive = (maxclip*10)
+					ammotogive = (maxclip*10) - mag1
 				elseif weaponclass.ClipSize == 0 and weaponclass.DefaultClip != 0 then
-					ammotogive = weaponclass.DefaultClip * 10
+					ammotogive = (weaponclass.DefaultClip * 10)
 				elseif weaponclass.BottomlessClip == true and weaponclass.Primary.ClipSize != 0 then --Bottomless clips case
 					ammotogive = (weaponclass.Primary.ClipSize * 10)
-				elseif weaponclass == "arccw_apex_bocek" then --Bocek Case
+				elseif self.ChosenWeapon == "arccw_apex_bocek" then --Bocek Case
 					ammotogive = 100
 				elseif wepammo == 8 or wepammo == 9 then --Launchers case
-					ammotogive = maxclip*31
+					ammotogive = (maxclip*31) - mag1
 				else --Generic
 					ammotogive = 10
 				end
 				
-				activator:Give(tostring(self.ChosenWeapon),true)
+				if !activator:HasWeapon(self.ChosenWeapon) then
+					activator:Give(tostring(self.ChosenWeapon),true)
+				end
+				
 				activator:SetAmmo(ammotogive, wepammo)
 			end
 			
