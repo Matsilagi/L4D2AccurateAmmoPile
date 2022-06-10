@@ -87,7 +87,19 @@ if SERVER then
 						ammotogive = (activator:GetActiveWeapon().Primary.DefaultClip * 10)
 					end
 				else
-					ammotogive =10
+					ammotogive = 10
+				end
+			
+				if activator:GetActiveWeapon().BottomlessClip == true and activator:GetActiveWeapon().Primary.ClipSize != 0 then --special case for ArcCW Bottomless Clip guns
+					ammotogive = (activator:GetActiveWeapon().Primary.ClipSize * 10)
+				end
+				
+				if activator:GetActiveWeapon():GetClass() == "arccw_apex_bocek" then --Bocek workaround
+					ammotogive = 100
+				end
+				
+				if wepammo == 8 or wepammo == 9 and mag1 >= 0 and maxclip >= 1 then --Explosive launchers workaround
+					ammotogive = (maxclip*31) - mag1
 				end
 			
 				activator:SetAmmo(ammotogive, wepammo)
