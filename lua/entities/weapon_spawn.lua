@@ -79,6 +79,9 @@ local scout_replacements = {"arccw_go_ssg08","arccw_apex_g7","arccw_apex_3030","
 --Tier 2 Snipers (Military Rifle and CS:S AWP)
 local g3sg1_replacements = {"arccw_go_g3","arccw_apex_sentinel","arccw_apex_tripletake","arccw_apex_longbow"}
 local awp_replacements = {"arccw_go_awp","arccw_apex_sentinel","arccw_apex_tripletake","arccw_apex_longbow"}
+--Tier 3 (M60,M79)
+local m79_replacements = {"arccw_ud_m79","arccw_go_negev","arccw_apex_kraber","arccw_apex_devotion","arccw_apex_lstar"}
+local m60_replacements = {"arccw_go_m249para","arccw_apex_kraber","arccw_apex_rampage","arccw_apex_chargerifle"}
 --Any tables (for all guns in X occasion)
 local any_replacements = {} --Any Gun
 local any_pistol_replacements = {} --Only Pistols
@@ -87,6 +90,7 @@ local any_smg_replacements = {} --Only SMGs
 local any_rifle_replacements = {} --Only Rifles
 local any_shotgun_replacements = {} --Only Shotguns
 local any_sniper_rifle_replacements = {} --Only Snipers
+local any_special_replacements = {} --Any Special Guns
 --Tier tables (for all guns of X tier)
 local tier1_replacements = {} --Any Tier 1 Gun (Pistols, SMGs,Pump-Shotguns)
 local tier1_shotgun_replacements = {} --Any Tier 1 Shotgun (Pump and Chrome)
@@ -199,6 +203,10 @@ function ENT:SetupWeaponTables()
 	table.Add(any_sniper_rifle_replacements, scout_replacements)
 	table.Add(any_sniper_rifle_replacements, g3sg1_replacements)
 	table.Add(any_sniper_rifle_replacements, awp_replacements)
+	
+	--Special Weapons
+	table.Add(any_special_replacements, m79_replacements)
+	table.Add(any_special_replacements, m60_replacements)
 	
 	if self.TableChoice == 0 then
 		self.TableChoice = any_replacements
@@ -328,12 +336,14 @@ if SERVER then
 					ammotogive = (weaponclass.DefaultClip * 10)
 				elseif weaponclass.BottomlessClip == true and weaponclass.Primary.ClipSize != 0 then --Bottomless clips case
 					ammotogive = (weaponclass.Primary.ClipSize * 10)
-				elseif self.ChosenWeapon == "arccw_apex_bocek" then --Bocek Case
-					ammotogive = 100
 				elseif wepammo == 8 or wepammo == 9 then --Launchers case
 					ammotogive = (maxclip*31) - mag1
 				else --Generic
 					ammotogive = 10
+				end
+				
+				if wepammo == "apex_arrow" then
+					ammotogive = 100
 				end
 				
 				if !activator:HasWeapon(self.ChosenWeapon) then

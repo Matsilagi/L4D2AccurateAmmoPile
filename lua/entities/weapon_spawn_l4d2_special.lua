@@ -1,7 +1,7 @@
 AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_lambda_entity" --I borrowed this from Lambda, no way im spending hours trying to get KeyValues to work.
-ENT.PrintName = "Weapon Spawner (Secondary)"
+ENT.PrintName = "Weapon Spawner (Special)"
 ENT.Category = "Left 4 Dead 2"
 ENT.Author = "Matsilagi"
 ENT.Editable = true
@@ -209,7 +209,7 @@ function ENT:SetupWeaponTables()
 	table.Add(any_special_replacements, m60_replacements)
 	
 	if self.TableChoice == 0 then
-		self.TableChoice = any_pistol_replacements
+		self.TableChoice = any_special_replacements
 	end
 	
 end
